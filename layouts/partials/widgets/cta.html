@@ -29,40 +29,52 @@
 {{- $bg := .bg | default "" -}}
 {{- $classes := .classes | default dict -}}
 
-{{- /* 构建容器类 - 注意：widget-wrapper 已有 mx-auto，这里只设置 max-w */ -}}
+{{- /* 构建容器类 */ -}}
 {{- $containerClass := printf "max-w-6xl %s" ($classes.container | default "") -}}
 
-{{- /* 构建内容 */ -}}
-{{- $content := "" -}}
-
-{{- /* CTA 卡片容器 */ -}}
-{{- $content = printf "%s%s" $content `<div class="max-w-3xl mx-auto text-center p-6 rounded-md shadow-xl dark:shadow-none dark:border dark:border-slate-600">` -}}
-
-{{- /* Headline 部分 - 使用自定义样式 */ -}}
-{{- $headlineClasses := dict 
-  "container" "mb-0 md:mb-0"
-  "title" "text-4xl md:text-4xl mb-4"
-  "subtitle" "dark:text-slate-400"
--}}
-{{- $content = printf "%s%s" $content (partial "ui/headline.html" (dict "title" $title "subtitle" $subtitle "tagline" $tagline "classes" $headlineClasses)) -}}
-
-{{- /* Actions 按钮组 */ -}}
-{{- if $actions -}}
-{{- $actionsHtml := `<div class="max-w-xs sm:max-w-md m-auto flex flex-nowrap flex-col sm:flex-row sm:justify-center gap-4 mt-6">` -}}
-{{- range $actions -}}
-{{- $actionsHtml = printf `%s<div class="flex w-full sm:w-auto">%s</div>` $actionsHtml (partial "ui/button.html" (dict "text" .text "href" .href "variant" (.variant | default "secondary") "target" .target "icon" .icon "class" "w-full sm:mb-0")) -}}
-{{- end -}}
-{{- $actionsHtml = printf "%s%s" $actionsHtml `</div>` -}}
-{{- $content = printf "%s%s" $content $actionsHtml -}}
-{{- end -}}
-
-{{- $content = printf "%s%s" $content `</div>` -}}
-
-{{- /* 使用 WidgetWrapper 渲染 */ -}}
-{{- partial "ui/widget-wrapper.html" (dict
-  "id" $id
-  "isDark" $isDark
-  "containerClass" $containerClass
-  "bg" $bg
-  "content" $content
-) -}}
+<section class="relative not-prose scroll-mt-[72px]"{{ with $id }} id="{{ . }}"{{ end }}>
+  {{- /* 背景层 */ -}}
+  <div class="absolute inset-0 pointer-events-none -z-1" aria-hidden="true">
+    {{- if $bg -}}
+      {{ $bg | safeHTML }}
+    {{- else -}}
+      <div class="absolute inset-0{{ if $isDark }} bg-dark dark:bg-transparent{{ end }}"></div>
+    {{- end -}}
+  </div>
+  
+  {{- /* 内容容器 */ -}}
+  <div class="relative mx-auto px-4 md:px-6 py-12 md:py-16 lg:py-20 text-default intersect-once intersect-quarter intersect-no-queue motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade {{ $containerClass }}{{ if $isDark }} dark{{ end }}">
+    {{- /* CTA 卡片容器 */ -}}
+    <div class="max-w-3xl mx-auto text-center p-6 rounded-md shadow-xl dark:shadow-none dark:border dark:border-slate-600">
+      {{- /* Headline 部分 */ -}}
+      {{- partial "ui/headline.html" (dict 
+        "title" $title 
+        "subtitle" $subtitle 
+        "tagline" $tagline
+        "classes" (dict 
+          "container" "mb-0 md:mb-0"
+          "title" "text-4xl md:text-4xl mb-4"
+          "subtitle" "dark:text-slate-400"
+        )
+      ) -}}
+      
+      {{- /* Actions 按钮组 */ -}}
+      {{- if $actions -}}
+      <div class="max-w-xs sm:max-w-md m-auto flex flex-nowrap flex-col sm:flex-row sm:justify-center gap-4 mt-6">
+        {{- range $actions -}}
+        <div class="flex w-full sm:w-auto">
+          {{- partial "ui/button.html" (dict 
+            "text" .text 
+            "href" .href 
+            "variant" (.variant | default "secondary") 
+            "target" .target 
+            "icon" .icon 
+            "class" "w-full sm:mb-0"
+          ) -}}
+        </div>
+        {{- end -}}
+      </div>
+      {{- end -}}
+    </div>
+  </div>
+</section>

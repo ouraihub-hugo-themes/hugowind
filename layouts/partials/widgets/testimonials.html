@@ -33,79 +33,83 @@
 {{- $bg := .bg | default "" -}}
 {{- $classes := .classes | default dict -}}
 
-{{- /* 构建容器类 - 注意：widget-wrapper 已有 mx-auto，这里只设置 max-w */ -}}
+{{- /* 构建容器类 */ -}}
 {{- $containerClass := printf "max-w-6xl %s" ($classes.container | default "") -}}
 
-{{- /* 构建内容 */ -}}
-{{- $content := "" -}}
-{{- $content = printf "%s%s" $content (partial "ui/headline.html" (dict "title" $title "subtitle" $subtitle "tagline" $tagline)) -}}
-
-{{- /* Testimonials 网格 */ -}}
-{{- $gridHtml := `<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">` -}}
-{{- range $testimonials -}}
-  {{- $gridHtml = printf "%s%s" $gridHtml `<div class="flex h-auto intersect-once motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0 intersect-quarter">` -}}
-  {{- $gridHtml = printf "%s%s" $gridHtml `<div class="flex flex-col p-4 md:p-6 rounded-md shadow-xl dark:shadow-none dark:border dark:border-slate-600">` -}}
-  
-  {{- /* 评价标题 */ -}}
-  {{- with .title -}}
-  {{- $gridHtml = printf `%s<h2 class="text-lg font-medium leading-6 pb-4">%s</h2>` $gridHtml . -}}
-  {{- end -}}
-  
-  {{- /* 评价内容 */ -}}
-  {{- with .testimonial -}}
-  {{- $gridHtml = printf `%s<blockquote class="flex-auto"><p class="text-muted">" %s "</p></blockquote>` $gridHtml . -}}
-  {{- end -}}
-  
-  {{- /* 分隔线 */ -}}
-  {{- $gridHtml = printf "%s%s" $gridHtml `<hr class="border-slate-200 dark:border-slate-600 my-4" />` -}}
-  
-  {{- /* 评价者信息 */ -}}
-  {{- $gridHtml = printf "%s%s" $gridHtml `<div class="flex items-center">` -}}
-  
-  {{- /* 头像 */ -}}
-  {{- with .image -}}
-    {{- $imgSrc := "" -}}
-    {{- $imgAlt := "" -}}
-    {{- if reflect.IsMap . -}}
-      {{- $imgSrc = .src -}}
-      {{- $imgAlt = .alt | default "" -}}
+<section class="relative not-prose scroll-mt-[72px]"{{ with $id }} id="{{ . }}"{{ end }}>
+  {{- /* 背景层 */ -}}
+  <div class="absolute inset-0 pointer-events-none -z-1" aria-hidden="true">
+    {{- if $bg -}}
+      {{ $bg | safeHTML }}
     {{- else -}}
-      {{- $imgSrc = . -}}
+      <div class="absolute inset-0{{ if $isDark }} bg-dark dark:bg-transparent{{ end }}"></div>
     {{- end -}}
-    {{- if $imgSrc -}}
-    {{- $gridHtml = printf `%s<div class="h-10 w-10 rounded-full border border-slate-200 dark:border-slate-600"><img class="h-10 w-10 rounded-full border border-slate-200 dark:border-slate-600 min-w-full min-h-full object-cover" src="%s" alt="%s" width="40" height="40" loading="lazy" /></div>` $gridHtml $imgSrc $imgAlt -}}
+  </div>
+  
+  {{- /* 内容容器 */ -}}
+  <div class="relative mx-auto px-4 md:px-6 py-12 md:py-16 lg:py-20 text-default intersect-once intersect-quarter intersect-no-queue motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade {{ $containerClass }}{{ if $isDark }} dark{{ end }}">
+    {{- /* Headline 部分 */ -}}
+    {{- partial "ui/headline.html" (dict "title" $title "subtitle" $subtitle "tagline" $tagline) -}}
+    
+    {{- /* Testimonials 网格 */ -}}
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {{- range $testimonials -}}
+      <div class="flex h-auto intersect-once motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0 intersect-quarter">
+        <div class="flex flex-col p-4 md:p-6 rounded-md shadow-xl dark:shadow-none dark:border dark:border-slate-600">
+          {{- /* 评价标题 */ -}}
+          {{- with .title -}}
+          <h2 class="text-lg font-medium leading-6 pb-4">{{ . }}</h2>
+          {{- end -}}
+          
+          {{- /* 评价内容 */ -}}
+          {{- with .testimonial -}}
+          <blockquote class="flex-auto">
+            <p class="text-muted">" {{ . }} "</p>
+          </blockquote>
+          {{- end -}}
+          
+          {{- /* 分隔线 */ -}}
+          <hr class="border-slate-200 dark:border-slate-600 my-4" />
+          
+          {{- /* 评价者信息 */ -}}
+          <div class="flex items-center">
+            {{- /* 头像 */ -}}
+            {{- with .image -}}
+              {{- $imgSrc := "" -}}
+              {{- $imgAlt := "" -}}
+              {{- if reflect.IsMap . -}}
+                {{- $imgSrc = .src -}}
+                {{- $imgAlt = .alt | default "" -}}
+              {{- else -}}
+                {{- $imgSrc = . -}}
+              {{- end -}}
+              {{- if $imgSrc -}}
+              <div class="h-10 w-10 rounded-full border border-slate-200 dark:border-slate-600">
+                <img class="h-10 w-10 rounded-full border border-slate-200 dark:border-slate-600 min-w-full min-h-full object-cover" src="{{ $imgSrc }}" alt="{{ $imgAlt }}" width="40" height="40" loading="lazy" />
+              </div>
+              {{- end -}}
+            {{- end -}}
+            
+            {{- /* 姓名和职位 */ -}}
+            <div class="grow ml-3 rtl:ml-0 rtl:mr-3">
+              {{- with .name -}}
+              <p class="text-base font-semibold">{{ . }}</p>
+              {{- end -}}
+              {{- with .job -}}
+              <p class="text-xs text-muted">{{ . }}</p>
+              {{- end -}}
+            </div>
+          </div>
+        </div>
+      </div>
+      {{- end -}}
+    </div>
+    
+    {{- /* Call to Action 按钮 */ -}}
+    {{- if and $callToAction $callToAction.text -}}
+    <div class="flex justify-center mx-auto w-fit mt-8 md:mt-12 font-medium">
+      {{- partial "ui/button.html" $callToAction -}}
+    </div>
     {{- end -}}
-  {{- end -}}
-  
-  {{- /* 姓名和职位 */ -}}
-  {{- $gridHtml = printf "%s%s" $gridHtml `<div class="grow ml-3 rtl:ml-0 rtl:mr-3">` -}}
-  {{- with .name -}}
-  {{- $gridHtml = printf `%s<p class="text-base font-semibold">%s</p>` $gridHtml . -}}
-  {{- end -}}
-  {{- with .job -}}
-  {{- $gridHtml = printf `%s<p class="text-xs text-muted">%s</p>` $gridHtml . -}}
-  {{- end -}}
-  {{- $gridHtml = printf "%s%s" $gridHtml `</div>` -}}
-  
-  {{- $gridHtml = printf "%s%s" $gridHtml `</div></div></div>` -}}
-{{- end -}}
-{{- $gridHtml = printf "%s%s" $gridHtml `</div>` -}}
-
-{{- $content = printf "%s%s" $content $gridHtml -}}
-
-{{- /* Call to Action 按钮 */ -}}
-{{- if and $callToAction $callToAction.text -}}
-{{- $ctaHtml := `<div class="flex justify-center mx-auto w-fit mt-8 md:mt-12 font-medium">` -}}
-{{- $ctaHtml = printf "%s%s" $ctaHtml (partial "ui/button.html" $callToAction) -}}
-{{- $ctaHtml = printf "%s%s" $ctaHtml `</div>` -}}
-{{- $content = printf "%s%s" $content $ctaHtml -}}
-{{- end -}}
-
-{{- /* 使用 WidgetWrapper 渲染 */ -}}
-{{- partial "ui/widget-wrapper.html" (dict
-  "id" $id
-  "isDark" $isDark
-  "containerClass" $containerClass
-  "bg" $bg
-  "content" $content
-) -}}
+  </div>
+</section>
