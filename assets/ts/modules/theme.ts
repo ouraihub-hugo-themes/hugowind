@@ -94,13 +94,17 @@ export class ThemeManager {
 
   /**
    * 设置主题切换按钮事件
+   * 使用事件委托确保动态元素也能响应
    */
   private setupToggle(): void {
-    document.querySelectorAll('[data-aw-toggle-color-scheme]').forEach(el => {
-      el.addEventListener('click', (e) => {
+    // 使用事件委托，绑定到 document
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      const toggleBtn = target.closest('[data-aw-toggle-color-scheme]');
+      if (toggleBtn) {
         e.preventDefault();
         this.toggle();
-      });
+      }
     });
   }
 

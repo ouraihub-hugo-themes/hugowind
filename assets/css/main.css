@@ -11,6 +11,9 @@
 @source "../../content/**/*.md";
 @source "../ts/**/*.ts";
 
+/* 配置 dark mode 使用 selector 策略（基于 .dark class） */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ============================================
    1. CSS 变量定义 - 与 AstroWind 完全一致
    ============================================ */
