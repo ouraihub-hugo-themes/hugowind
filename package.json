@@ -1,6 +1,6 @@
 {
   "name": "hugowind",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A Hugo theme inspired by AstroWind with full multilingual support",
   "type": "module",
   "scripts": {
