@@ -20,12 +20,12 @@
 {{- $class := .class | default "" -}}
 {{- $type := .type | default "" -}}
 
-{{- /* 变体样式映射 */ -}}
+{{- /* 变体样式映射 - btn 是基础类，必须包含 */ -}}
 {{- $variantClass := "" -}}
 {{- if eq $variant "primary" -}}
-  {{- $variantClass = "btn-primary" -}}
+  {{- $variantClass = "btn btn-primary" -}}
 {{- else if eq $variant "secondary" -}}
-  {{- $variantClass = "btn-secondary" -}}
+  {{- $variantClass = "btn btn-secondary" -}}
 {{- else if eq $variant "tertiary" -}}
   {{- $variantClass = "btn btn-tertiary" -}}
 {{- else if eq $variant "link" -}}

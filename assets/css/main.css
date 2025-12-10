@@ -179,6 +179,7 @@
 
 /* ============================================
    4. 按钮组件样式 - 精确复刻 AstroWind
+   参考: astrowind/src/assets/styles/tailwind.css
    ============================================ */
 
 .btn {
@@ -186,7 +187,8 @@
   align-items: center;
   justify-content: center;
   border-radius: 9999px;
-  border: 1px solid rgb(156 163 175);
+  /* border-gray-400 = #9ca3af */
+  border: 1px solid #9ca3af;
   background-color: transparent;
   font-weight: 500;
   text-align: center;
@@ -205,25 +207,27 @@
 }
 
 .btn:hover {
-  background-color: rgb(243 244 246);
-  border-color: rgb(75 85 99);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px -2px rgb(0 0 0 / 10%);
+  /* hover:bg-gray-100 hover:border-gray-600 */
+  background-color: #f3f4f6;
+  border-color: #4b5563;
 }
 
 .btn:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgb(191 219 254), 0 0 0 4px rgb(59 130 246);
+  /* focus:ring-blue-500 focus:ring-offset-blue-200 focus:ring-2 focus:ring-offset-2 */
+  box-shadow: 0 0 0 2px #bfdbfe, 0 0 0 4px #3b82f6;
 }
 
 .dark .btn {
-  color: rgb(203 213 225);
-  border-color: rgb(100 116 139);
+  /* dark:text-slate-300 dark:border-slate-500 */
+  color: #cbd5e1;
+  border-color: #64748b;
 }
 
 .dark .btn:hover {
-  background-color: rgb(30 41 59);
-  border-color: rgb(30 41 59);
+  /* dark:hover:bg-slate-800 dark:hover:border-slate-800 */
+  background-color: #1e293b;
+  border-color: #1e293b;
 }
 
 /* 主要按钮 */
@@ -232,15 +236,12 @@
   background-color: var(--aw-color-primary);
   color: white;
   border-color: var(--aw-color-primary);
-  transition: all 0.3s ease;
 }
 
 .btn-primary:hover {
   background-color: var(--aw-color-secondary);
   border-color: var(--aw-color-secondary);
   color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px -5px rgb(1 97 239 / 40%);
 }
 
 .dark .btn-primary {
@@ -252,12 +253,11 @@
 .dark .btn-primary:hover {
   background-color: var(--aw-color-secondary);
   border-color: var(--aw-color-secondary);
-  box-shadow: 0 10px 25px -5px rgb(1 97 239 / 30%);
 }
 
-/* 次要按钮 - 继承 .btn 基础样式，添加轻微区分 */
+/* 次要按钮 - 与 .btn 完全相同 */
 .btn-secondary {
-  font-weight: 500;
+  /* 继承 .btn 所有样式 */
 }
 
 /* 文字按钮 */
