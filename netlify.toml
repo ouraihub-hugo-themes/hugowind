@@ -1,0 +1,107 @@
+# Netlify 部署配置
+# https://docs.netlify.com/configure-builds/file-based-configuration/
+
+[build]
+  publish = "public"
+  command = "pnpm build:search"
+
+[build.environment]
+  HUGO_VERSION = "0.140.0"
+  HUGO_ENV = "production"
+  NODE_VERSION = "20"
+
+# 生产环境
+[context.production]
+  command = "pnpm build:search"
+
+[context.production.environment]
+  HUGO_ENV = "production"
+
+# 预览环境 (Pull Request)
+[context.deploy-preview]
+  command = "pnpm build"
+
+[context.deploy-preview.environment]
+  HUGO_ENV = "staging"
+
+# 分支部署
+[context.branch-deploy]
+  command = "pnpm build"
+
+[context.branch-deploy.environment]
+  HUGO_ENV = "staging"
+
+# 重定向规则
+[[redirects]]
+  from = "/zh"
+  to = "/zh/"
+  status = 301
+
+[[redirects]]
+  from = "/en"
+  to = "/en/"
+  status = 301
+
+[[redirects]]
+  from = "/zh-tw"
+  to = "/zh-tw/"
+  status = 301
+
+# 默认语言重定向
+[[redirects]]
+  from = "/"
+  to = "/zh/"
+  status = 302
+  conditions = {Language = ["zh", "zh-CN", "zh-Hans"]}
+
+[[redirects]]
+  from = "/"
+  to = "/zh-tw/"
+  status = 302
+  conditions = {Language = ["zh-TW", "zh-Hant"]}
+
+[[redirects]]
+  from = "/"
+  to = "/en/"
+  status = 302
+  conditions = {Language = ["en"]}
+
+# 404 页面
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
+
+# HTTP 头配置
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/_pagefind/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"

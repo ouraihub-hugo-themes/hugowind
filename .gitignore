@@ -1,0 +1,46 @@
+# Hugo 构建输出
+/public/
+/resources/
+/.hugo_build.lock
+hugo_stats.json
+
+# Node.js
+node_modules/
+.pnpm-store/
+
+# 构建产物（源码在 assets/，编译到 static/）
+/static/js/
+/static/css/main.css
+
+# Pagefind 搜索索引
+/public/_pagefind/
+
+# 环境变量
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 日志
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# 测试覆盖率
+coverage/
+.nyc_output/
+
+# 临时文件
+tmp/
+temp/
+*.tmp

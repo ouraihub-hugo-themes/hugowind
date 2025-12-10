@@ -1,0 +1,813 @@
+/**
+ * HugoWind 主样式文件
+ * 精确复刻 AstroWind 设计系统
+ * 参考: docs/design-tokens.md
+ */
+
+@import "tailwindcss";
+
+/* ============================================
+   1. CSS 变量定义 - 与 AstroWind 完全一致
+   ============================================ */
+
+:root {
+  /* 字体系统 */
+  --aw-font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --aw-font-serif: 'Inter Variable', 'Inter', ui-serif, Georgia, serif;
+  --aw-font-heading: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* 主色调 - AstroWind 原版值 */
+  --aw-color-primary: rgb(1 97 239);      /* #0161EF */
+  --aw-color-secondary: rgb(1 84 207);    /* #0154CF */
+  --aw-color-accent: rgb(109 40 217);     /* #6D28D9 */
+
+  /* 文字颜色 - 亮色模式 */
+  --aw-color-text-heading: rgb(0 0 0);
+  --aw-color-text-default: rgb(16 16 16);
+  --aw-color-text-muted: rgb(16 16 16 / 66%);
+
+  /* 背景颜色 */
+  --aw-color-bg-page: rgb(255 255 255);
+  --aw-color-bg-page-dark: rgb(3 6 32);
+
+  /* 选择文本样式 */
+  ::selection {
+    background-color: lavender;
+  }
+}
+
+/* 暗色模式变量 */
+.dark {
+  --aw-font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --aw-font-serif: 'Inter Variable', 'Inter', ui-serif, Georgia, serif;
+  --aw-font-heading: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* 主色调 - 暗色模式保持一致 */
+  --aw-color-primary: rgb(1 97 239);
+  --aw-color-secondary: rgb(1 84 207);
+  --aw-color-accent: rgb(109 40 217);
+
+  /* 文字颜色 - 暗色模式 */
+  --aw-color-text-heading: rgb(247 248 248);
+  --aw-color-text-default: rgb(229 236 246);
+  --aw-color-text-muted: rgb(229 236 246 / 66%);
+
+  /* 背景颜色 */
+  --aw-color-bg-page: rgb(3 6 32);
+
+  ::selection {
+    background-color: black;
+    color: snow;
+  }
+}
+
+/* ============================================
+   2. Tailwind CSS v4 主题扩展
+   ============================================ */
+
+@theme {
+  /* 颜色变量映射 - 仅定义主题色 */
+  --color-primary: var(--aw-color-primary);
+  --color-secondary: var(--aw-color-secondary);
+  --color-accent: var(--aw-color-accent);
+
+  /* 字体变量映射 */
+  --font-sans: var(--aw-font-sans);
+  --font-serif: var(--aw-font-serif);
+  --font-heading: var(--aw-font-heading);
+
+  /* 动画定义 */
+  --animate-fade: fadeInUp 1s both;
+  --animate-blob: blob 7s infinite;
+  --animate-fade-in: fadeIn 0.5s ease-in-out;
+  --animate-slide-up: slideUp 0.5s ease-out;
+
+  /* fadeInUp 动画 - AstroWind 核心动画 */
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(2rem);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* blob 动画 - Hero 背景装饰 */
+  @keyframes blob {
+    0% {
+      transform: translate(0px, 0px) scale(1);
+    }
+    33% {
+      transform: translate(30px, -50px) scale(1.1);
+    }
+    66% {
+      transform: translate(-20px, 20px) scale(0.9);
+    }
+    100% {
+      transform: translate(0px, 0px) scale(1);
+    }
+  }
+
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* ============================================
+   3. 工具类定义
+   ============================================ */
+
+@utility bg-page {
+  background-color: var(--aw-color-bg-page);
+}
+
+@utility bg-dark {
+  background-color: var(--aw-color-bg-page-dark);
+}
+
+@utility bg-light {
+  background-color: rgb(255 255 255);
+}
+
+@utility text-page {
+  color: var(--aw-color-text-default);
+}
+
+@utility text-muted {
+  color: rgb(16 16 16 / 66%);
+}
+
+@utility text-default {
+  color: rgb(16 16 16);
+}
+
+@utility text-heading {
+  color: rgb(0 0 0);
+}
+
+/* 行高工具类 */
+@utility leading-tighter {
+  line-height: 1.1;
+}
+
+/* 字间距工具类 */
+@utility tracking-tighter {
+  letter-spacing: -0.04em;
+}
+
+/* ============================================
+   4. 按钮组件样式 - 精确复刻 AstroWind
+   ============================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid rgb(156 163 175);
+  background-color: transparent;
+  font-weight: 500;
+  text-align: center;
+  font-size: 1rem;
+  line-height: 1.375;
+  transition: all 0.2s ease-in;
+  padding: 0.875rem 1.5rem;
+  cursor: pointer;
+  color: var(--aw-color-text-default);
+}
+
+@media (min-width: 768px) {
+  .btn {
+    padding: 0.875rem 2rem;
+  }
+}
+
+.btn:hover {
+  background-color: rgb(243 244 246);
+  border-color: rgb(75 85 99);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px -2px rgb(0 0 0 / 10%);
+}
+
+.btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(191 219 254), 0 0 0 4px rgb(59 130 246);
+}
+
+.dark .btn {
+  color: rgb(203 213 225);
+  border-color: rgb(100 116 139);
+}
+
+.dark .btn:hover {
+  background-color: rgb(30 41 59);
+  border-color: rgb(30 41 59);
+}
+
+/* 主要按钮 */
+.btn-primary {
+  font-weight: 600;
+  background-color: var(--aw-color-primary);
+  color: white;
+  border-color: var(--aw-color-primary);
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--aw-color-secondary);
+  border-color: var(--aw-color-secondary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgb(1 97 239 / 40%);
+}
+
+.dark .btn-primary {
+  color: white;
+  background-color: var(--aw-color-primary);
+  border-color: var(--aw-color-primary);
+}
+
+.dark .btn-primary:hover {
+  background-color: var(--aw-color-secondary);
+  border-color: var(--aw-color-secondary);
+  box-shadow: 0 10px 25px -5px rgb(1 97 239 / 30%);
+}
+
+/* 次要按钮 - 继承 .btn 基础样式，添加轻微区分 */
+.btn-secondary {
+  font-weight: 500;
+}
+
+/* 文字按钮 */
+.btn-tertiary {
+  border: none;
+  box-shadow: none;
+  color: var(--aw-color-text-muted);
+  background-color: transparent;
+}
+
+.btn-tertiary:hover {
+  color: rgb(17 24 39);
+  background-color: transparent;
+}
+
+.dark .btn-tertiary {
+  color: rgb(156 163 175);
+}
+
+.dark .btn-tertiary:hover {
+  color: white;
+}
+
+/* ============================================
+   5. Header 组件样式
+   ============================================ */
+
+/* Header 滚动状态 - 亮色模式 */
+#header.scroll > div:first-child {
+  background-color: var(--aw-color-bg-page);
+  box-shadow: 0 0.375rem 1.5rem 0 rgb(140 152 164 / 13%);
+}
+
+@media (min-width: 768px) {
+  #header.scroll > div:first-child {
+    background-color: rgb(255 255 255 / 90%);
+    backdrop-filter: blur(12px);
+  }
+}
+
+/* Header 滚动状态 - 暗色模式 */
+.dark #header.scroll > div:first-child,
+#header.scroll.dark > div:first-child {
+  background-color: var(--aw-color-bg-page);
+  border-bottom: 1px solid rgb(107 114 128 / 20%);
+  box-shadow: none;
+}
+
+@media (min-width: 768px) {
+  .dark #header.scroll > div:first-child,
+  #header.scroll.dark > div:first-child {
+    background-color: rgb(3 6 33 / 90%);
+  }
+}
+
+/* 移动端菜单展开状态 */
+#header.expanded nav {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  right: 0;
+  bottom: 70px !important;
+  padding: 0 5px;
+}
+
+/* ============================================
+   6. 下拉菜单样式
+   ============================================ */
+
+.dropdown:focus .dropdown-menu,
+.dropdown:focus-within .dropdown-menu,
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+/* ============================================
+   7. 汉堡菜单动画
+   ============================================ */
+
+[data-aw-toggle-menu] path {
+  transition: all 0.3s;
+}
+
+[data-aw-toggle-menu].expanded g > path:first-child {
+  transform: rotate(-45deg) translateY(15px) translateX(-3px);
+}
+
+[data-aw-toggle-menu].expanded g > path:last-child {
+  transform: rotate(45deg) translateY(-8px) translateX(14px);
+}
+
+/* ============================================
+   8. 动画工具类
+   ============================================ */
+
+.animate-fade {
+  animation: fadeInUp 1s both;
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out;
+}
+
+/* 动画延迟 */
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+.animation-delay-6000 {
+  animation-delay: 6s;
+}
+
+/* ============================================
+   Hero 区域特定样式
+   ============================================ */
+
+/* Hero 背景渐变 - 复刻 AstroWind */
+.hero-gradient {
+  background: linear-gradient(to bottom right, 
+    rgb(239 246 255) 0%,    /* blue-50 */
+    rgb(255 255 255) 50%,   /* white */
+    rgb(236 254 255) 100%   /* cyan-50 */
+  );
+}
+
+.dark .hero-gradient {
+  background: linear-gradient(to bottom right,
+    rgb(15 23 42) 0%,       /* slate-900 */
+    rgb(15 23 42) 50%,      /* slate-900 */
+    rgb(30 41 59) 100%      /* slate-800 */
+  );
+}
+
+/* Blob 装饰元素基础样式 */
+.blob {
+  border-radius: 9999px;
+  filter: blur(40px);
+  mix-blend-mode: multiply;
+}
+
+.dark .blob {
+  mix-blend-mode: normal;
+}
+
+/* ============================================
+   9. 交叉观察器动画触发类
+   ============================================ */
+
+/* 初始状态标记 - 用于 JS IntersectionObserver */
+.intersect-once {
+  --intersect-once: 1;
+}
+
+.intersect-quarter {
+  --intersect-threshold: 0.25;
+}
+
+.intersect-half {
+  --intersect-threshold: 0.5;
+}
+
+.intersect-full {
+  --intersect-threshold: 0.99;
+}
+
+.intersect-no-queue {
+  --intersect-no-queue: 1;
+}
+
+/* 动画触发 - 需要 JS 配合 IntersectionObserver */
+/* 初始状态 - 透明且向下偏移 */
+.motion-safe\:md\:opacity-0 {
+  opacity: 1; /* 默认可见，JS 会添加 no-intersect 属性 */
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+  /* 有 no-intersect 属性时隐藏 */
+  [no-intersect].motion-safe\:md\:opacity-0 {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+  
+  /* 触发动画后显示 */
+  .motion-safe\:md\:intersect\:animate-fade.intersected,
+  .motion-safe\:md\:opacity-0.intersected {
+    animation: fadeInUp 1s both;
+  }
+}
+
+/* 减少动画偏好时直接显示 */
+@media (prefers-reduced-motion: reduce) {
+  .motion-safe\:md\:opacity-0 {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  
+  .motion-safe\:md\:intersect\:animate-fade {
+    animation: none !important;
+  }
+}
+
+/* ============================================
+   10. 图标样式
+   ============================================ */
+
+/* 细线图标 */
+.icon-light > * {
+  stroke-width: 1.2;
+}
+
+/* 粗线图标 */
+.icon-bold > * {
+  stroke-width: 2.4;
+}
+
+/* ============================================
+   11. 排版样式 (Prose)
+   ============================================ */
+
+.prose {
+  color: var(--aw-color-text-default);
+}
+
+.prose a {
+  color: var(--aw-color-primary);
+  text-decoration: none;
+}
+
+.prose a:hover {
+  text-decoration: underline;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  font-family: var(--aw-font-heading);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  color: var(--aw-color-text-heading);
+  scroll-margin-top: 80px;
+}
+
+.prose img {
+  border-radius: 0.375rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.prose li {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* 暗色模式排版 */
+.dark .prose {
+  color: var(--aw-color-text-default);
+}
+
+.dark .prose a {
+  color: rgb(96 165 250);
+}
+
+.dark .prose h1,
+.dark .prose h2,
+.dark .prose h3,
+.dark .prose h4,
+.dark .prose h5,
+.dark .prose h6 {
+  color: rgb(203 213 225);
+}
+
+/* ============================================
+   12. 链接悬停效果
+   ============================================ */
+
+.hover\:text-link:hover {
+  color: var(--aw-color-primary);
+}
+
+.dark .hover\:text-link:hover,
+.dark .dark\:hover\:text-white:hover {
+  color: white;
+}
+
+/* 活动链接状态 */
+.aw-link-active {
+  color: var(--aw-color-primary);
+}
+
+.dark .aw-link-active {
+  color: rgb(96 165 250);
+}
+
+/* ============================================
+   13. 卡片样式
+   ============================================ */
+
+.card {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  transition: box-shadow 0.3s;
+}
+
+.card:hover {
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+.dark .card {
+  background-color: rgb(30 41 59);
+}
+
+/* ============================================
+   14. 不使用 prose 样式的区域
+   ============================================ */
+
+.not-prose {
+  font-size: inherit;
+}
+
+.not-prose a {
+  text-decoration: none;
+}
+
+.not-prose h1,
+.not-prose h2,
+.not-prose h3,
+.not-prose h4,
+.not-prose h5,
+.not-prose h6 {
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+}
+
+
+/* ============================================
+   15. 代码高亮样式
+   ============================================ */
+
+/* 代码块容器 */
+.highlight {
+  position: relative;
+  margin: 1.5rem 0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.highlight pre {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  tab-size: 2;
+  background-color: #282a36;
+  color: #f8f8f2;
+}
+
+.highlight code {
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+}
+
+/* 行号 */
+.highlight .lnt {
+  margin-right: 1rem;
+  padding-right: 0.75rem;
+  color: #6272a4;
+  border-right: 1px solid #44475a;
+  user-select: none;
+}
+
+/* Dracula 主题颜色 */
+.highlight .c { color: #6272a4; } /* Comment */
+.highlight .err { color: #ff5555; } /* Error */
+.highlight .k { color: #ff79c6; } /* Keyword */
+.highlight .l { color: #f1fa8c; } /* Literal */
+.highlight .n { color: #f8f8f2; } /* Name */
+.highlight .o { color: #ff79c6; } /* Operator */
+.highlight .p { color: #f8f8f2; } /* Punctuation */
+.highlight .ch { color: #6272a4; } /* Comment.Hashbang */
+.highlight .cm { color: #6272a4; } /* Comment.Multiline */
+.highlight .cp { color: #ff79c6; } /* Comment.Preproc */
+.highlight .c1 { color: #6272a4; } /* Comment.Single */
+.highlight .cs { color: #6272a4; } /* Comment.Special */
+.highlight .gd { color: #ff5555; } /* Generic.Deleted */
+.highlight .gi { color: #50fa7b; } /* Generic.Inserted */
+.highlight .kc { color: #ff79c6; } /* Keyword.Constant */
+.highlight .kd { color: #8be9fd; font-style: italic; } /* Keyword.Declaration */
+.highlight .kn { color: #ff79c6; } /* Keyword.Namespace */
+.highlight .kp { color: #ff79c6; } /* Keyword.Pseudo */
+.highlight .kr { color: #ff79c6; } /* Keyword.Reserved */
+.highlight .kt { color: #8be9fd; } /* Keyword.Type */
+.highlight .m { color: #bd93f9; } /* Literal.Number */
+.highlight .s { color: #f1fa8c; } /* Literal.String */
+.highlight .na { color: #50fa7b; } /* Name.Attribute */
+.highlight .nb { color: #8be9fd; font-style: italic; } /* Name.Builtin */
+.highlight .nc { color: #50fa7b; } /* Name.Class */
+.highlight .nd { color: #50fa7b; } /* Name.Decorator */
+.highlight .ne { color: #50fa7b; } /* Name.Exception */
+.highlight .nf { color: #50fa7b; } /* Name.Function */
+.highlight .nt { color: #ff79c6; } /* Name.Tag */
+.highlight .nv { color: #8be9fd; font-style: italic; } /* Name.Variable */
+.highlight .ow { color: #ff79c6; } /* Operator.Word */
+.highlight .mf { color: #bd93f9; } /* Literal.Number.Float */
+.highlight .mh { color: #bd93f9; } /* Literal.Number.Hex */
+.highlight .mi { color: #bd93f9; } /* Literal.Number.Integer */
+.highlight .s1 { color: #f1fa8c; } /* Literal.String.Single */
+.highlight .s2 { color: #f1fa8c; } /* Literal.String.Double */
+.highlight .se { color: #f1fa8c; } /* Literal.String.Escape */
+.highlight .sr { color: #f1fa8c; } /* Literal.String.Regex */
+
+/* 内联代码 */
+:not(pre) > code {
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 0.875em;
+  background-color: rgba(175, 184, 193, 0.2);
+  border-radius: 0.25rem;
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+}
+
+.dark :not(pre) > code {
+  background-color: rgba(110, 118, 129, 0.4);
+}
+
+/* ============================================
+   16. 文本截断工具类
+   ============================================ */
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
+/* ============================================
+   17. 触摸设备交互样式
+   ============================================ */
+
+/* 触摸设备标识 */
+.touch-device {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 触摸反馈 */
+.touch-active {
+  opacity: 0.7;
+  transform: scale(0.98);
+  transition: opacity 0.1s, transform 0.1s;
+}
+
+/* 图片懒加载过渡 */
+img[data-src] {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+img.loaded {
+  opacity: 1;
+}
+
+/* ============================================
+   18. 搜索模态框样式
+   ============================================ */
+
+#search-modal {
+  display: none;
+}
+
+#search-modal.show {
+  display: flex;
+}
+
+#search-modal.show .search-dialog {
+  animation: searchDialogIn 0.2s ease-out forwards;
+}
+
+@keyframes searchDialogIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* 搜索结果项样式 */
+.search-result-item {
+  border-radius: 0.5rem;
+  transition: background-color 0.15s ease;
+}
+
+.search-result-item a {
+  display: block;
+  padding: 1rem;
+}
+
+.search-result-item:hover {
+  background-color: rgb(243 244 246);
+}
+
+.dark .search-result-item:hover {
+  background-color: rgb(31 41 55);
+}
+
+/* 搜索关键词高亮 */
+.search-result-item mark {
+  background-color: rgb(254 240 138);
+  padding: 0 0.125rem;
+  border-radius: 0.125rem;
+}
+
+.dark .search-result-item mark {
+  background-color: rgb(133 77 14);
+  color: rgb(254 243 199);
+}
+
+/* ============================================
+   19. 暗色模式文字颜色覆盖
+   ============================================ */
+
+.dark .text-muted {
+  color: rgb(229 236 246 / 66%);
+}
+
+.dark .text-default {
+  color: rgb(229 236 246);
+}
+
+.dark .text-heading {
+  color: rgb(247 248 248);
+}

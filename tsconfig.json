@@ -1,0 +1,53 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "moduleResolution": "bundler",
+    
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": true,
+    "removeComments": false,
+    
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["assets/ts/*"],
+      "@types/*": ["assets/ts/types/*"],
+      "@utils/*": ["assets/ts/utils/*"],
+      "@modules/*": ["assets/ts/modules/*"]
+    }
+  },
+  "include": [
+    "assets/ts/**/*",
+    "tests/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "public",
+    "resources",
+    "dist",
+    "assets/js"
+  ]
+}

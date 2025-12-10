@@ -1,0 +1,204 @@
+name: Publish Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g., 1.0.0)"
+        required: true
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: "0.140.0"
+          extended: true
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Get version
+        id: version
+        run: |
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            VERSION=${GITHUB_REF#refs/tags/v}
+          else
+            VERSION="${{ github.event.inputs.version }}"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Install dependencies
+        run: pnpm install --ignore-scripts
+
+      - name: Run tests
+        run: pnpm test:run
+
+      - name: Create release package structure
+        run: |
+          VERSION=${{ steps.version.outputs.version }}
+          RELEASE_PATH="release/hugowind-${VERSION}"
+          
+          mkdir -p "$RELEASE_PATH"
+          mkdir -p "$RELEASE_PATH/static/js"
+          mkdir -p "$RELEASE_PATH/static/css"
+          
+          echo "RELEASE_PATH=$RELEASE_PATH" >> $GITHUB_ENV
+
+      - name: Build assets to release directory
+        run: |
+          # Build TypeScript
+          pnpm esbuild assets/ts/main.ts --bundle --minify --outfile="$RELEASE_PATH/static/js/main.js" --target=es2020
+          pnpm esbuild assets/ts/toggle-theme.ts --bundle --minify --outfile="$RELEASE_PATH/static/js/toggle-theme.js" --target=es2020
+          
+          # Build CSS
+          pnpm tailwindcss -i ./assets/css/main.css -o "$RELEASE_PATH/static/css/main.css" --minify
+          
+          # Verify build output
+          echo "Build output:"
+          ls -lh "$RELEASE_PATH/static/js/"
+          ls -lh "$RELEASE_PATH/static/css/"
+
+      - name: Copy theme files to release package
+        run: |
+          # Copy theme directories
+          for dir in layouts i18n data archetypes config; do
+            if [ -d "$dir" ]; then
+              cp -r "$dir" "$RELEASE_PATH/"
+            fi
+          done
+          
+          # Copy static files (excluding compiled js/css)
+          if [ -d "static" ]; then
+            find static -type f ! -path "*/js/*" ! -path "*/css/*" -exec cp --parents {} "$RELEASE_PATH/" \; 2>/dev/null || true
+          fi
+
+          # Copy documentation and config files
+          for file in theme.toml README.md LICENSE .gitignore; do
+            if [ -f "$file" ]; then
+              cp "$file" "$RELEASE_PATH/"
+            fi
+          done
+
+          # Use go.mod.dist for distribution
+          if [ -f "go.mod.dist" ]; then
+            cp "go.mod.dist" "$RELEASE_PATH/go.mod"
+          fi
+
+          # Generate release info
+          cat > "$RELEASE_PATH/RELEASE-INFO.md" << EOF
+          # HugoWind Theme - Release Package
+
+          **Version**: ${{ steps.version.outputs.version }}
+          **Release Date**: $(date -u '+%Y-%m-%d %H:%M:%S')
+
+          ## What's Included
+
+          - ✅ Pre-compiled CSS (Tailwind CSS v4) in \`static/css/\`
+          - ✅ Pre-compiled JavaScript in \`static/js/\`
+          - ✅ Complete theme templates in \`layouts/\`
+          - ✅ Internationalization files in \`i18n/\`
+          - ✅ Hugo configuration in \`config/\`
+
+          **No build step required - ready to use immediately!**
+
+          ## Installation
+
+          ### Via Hugo Modules
+          \`\`\`toml
+          [module]
+            [[module.imports]]
+              path = "github.com/ouraihub-hugo-themes/hugowind-dist"
+          \`\`\`
+
+          ### Via Git Clone
+          \`\`\`bash
+          git clone https://github.com/ouraihub-hugo-themes/hugowind-dist.git themes/hugowind
+          \`\`\`
+          EOF
+
+      - name: Create archives
+        run: |
+          cd release
+          tar -czf "hugowind-${{ steps.version.outputs.version }}.tar.gz" "hugowind-${{ steps.version.outputs.version }}"
+          zip -r "hugowind-${{ steps.version.outputs.version }}.zip" "hugowind-${{ steps.version.outputs.version }}"
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-package
+          path: release/
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release/hugowind-${{ steps.version.outputs.version }}.tar.gz
+            release/hugowind-${{ steps.version.outputs.version }}.zip
+          body: |
+            # HugoWind Theme v${{ steps.version.outputs.version }}
+
+            A modern Hugo theme inspired by AstroWind with full multilingual support.
+
+            ## What's Included
+            - Pre-compiled CSS (Tailwind CSS v4)
+            - Pre-compiled JavaScript (TypeScript)
+            - Complete theme templates
+            - Multi-language support (zh, en, zh-tw)
+
+            ## Quick Start
+
+            ### Via Hugo Modules (Recommended)
+            ```toml
+            [module]
+              [[module.imports]]
+                path = "github.com/ouraihub-hugo-themes/hugowind-dist"
+            ```
+
+            ### Via Git
+            ```bash
+            git clone https://github.com/ouraihub-hugo-themes/hugowind.git themes/hugowind
+            ```
+
+            ## Features
+            - 🌍 Multi-language support
+            - 🌙 Dark mode
+            - 🔍 Full-text search (Pagefind)
+            - ⚡ High performance (PageSpeed 90+)
+            - 📱 Responsive design
+
+            See [README.md](https://github.com/ouraihub-hugo-themes/hugowind) for more details.
+          draft: false
+          prerelease: false
+
+      # Optional: Sync to distribution repository
+      # Uncomment and configure if you have a separate dist repo
+      # - name: Sync to distribution repository
+      #   if: startsWith(github.ref, 'refs/tags/')
+      #   run: |
+      #     # Add sync logic here
+      #   env:
+      #     RELEASE_REPO_TOKEN: ${{ secrets.RELEASE_REPO_TOKEN }}

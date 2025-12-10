@@ -1,0 +1,30 @@
+# Pagefind 配置
+# HugoWind 主题搜索功能配置
+# 需求: 8.1, 8.2, 8.3, 8.4
+
+# 构建输出目录
+site: public
+
+# Pagefind 资源输出子目录
+output_subdir: _pagefind
+
+# 排除不需要索引的页面元素
+exclude_selectors:
+  - "nav"
+  - "header"
+  - "footer"
+  - ".sidebar"
+  - ".search-modal"
+  - ".toc"
+  - ".post-nav"
+  - ".post-footer"
+  - ".comments"
+  - ".social-share"
+  - "script"
+  - "style"
+
+# 自动检测语言（支持多语言）
+# force_language: "zh"
+
+# 只索引 main 标签内的内容
+root_selector: "main"
