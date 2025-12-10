@@ -14,7 +14,7 @@ sections:
     actions:
       - variant: "primary"
         text: "Get template"
-        href: "https://github.com/arthelokyo/hugowind"
+        href: "https://github.com/ouraihub-hugo-themes/hugowind-dist"
         target: "_blank"
         icon: "tabler:download"
       - text: "Learn more"
@@ -204,7 +204,7 @@ sections:
     actions:
       - variant: "primary"
         text: "Get template"
-        href: "https://github.com/arthelokyo/hugowind"
+        href: "https://github.com/ouraihub-hugo-themes/hugowind-dist"
         target: "_blank"
         icon: "tabler:download"
 ---

@@ -91,7 +91,7 @@ keywords = ["Hugo", "Theme", "Blog", "Tailwind CSS", "Starter"]
   # image = "images/hero-image.png"  # 可选的 Hero 图片
   [hero.primaryCTA]
     text = "Get template"
-    link = "https://github.com/onwidget/astrowind"
+    link = "https://github.com/ouraihub-hugo-themes/hugowind-dist"
     icon = "tabler:download"
   [hero.secondaryCTA]
     text = "Learn more"
@@ -99,7 +99,7 @@ keywords = ["Hugo", "Theme", "Blog", "Tailwind CSS", "Starter"]
 
 # 社交链接
 [social]
-  github = "https://github.com/onwidget/astrowind"
+  github = "https://github.com/ouraihub-hugo-themes/hugowind-dist"
   twitter = "https://twitter.com/onwidget"
 
 # 页脚配置

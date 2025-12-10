@@ -23,6 +23,6 @@ sections:
     actions:
       - variant: "primary"
         text: "Download Template"
-        href: "https://github.com/onwidget/astrowind"
+        href: "https://github.com/ouraihub-hugo-themes/hugowind-dist"
         icon: "tabler:download"
 ---

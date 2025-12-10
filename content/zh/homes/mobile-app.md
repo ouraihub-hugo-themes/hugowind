@@ -15,11 +15,11 @@ sections:
     actions:
       - variant: "link"
         text: "App Store"
-        href: "https://github.com/arthelokyo/hugowind"
+        href: "https://github.com/ouraihub-hugo-themes/hugowind-dist"
         target: "_blank"
       - variant: "link"
         text: "Google Play"
-        href: "https://github.com/arthelokyo/hugowind"
+        href: "https://github.com/ouraihub-hugo-themes/hugowind-dist"
         target: "_blank"
 
   # Features2 Widget - 使用方法
@@ -121,7 +121,7 @@ sections:
     callToAction:
       target: "_blank"
       text: "阅读更多评价"
-      href: "https://github.com/arthelokyo/hugowind"
+      href: "https://github.com/ouraihub-hugo-themes/hugowind-dist"
       icon: "tabler:chevron-right"
 
   # FAQs Widget
@@ -147,11 +147,11 @@ sections:
     actions:
       - variant: "primary"
         text: "在 App Store 下载"
-        href: "https://github.com/arthelokyo/hugowind"
+        href: "https://github.com/ouraihub-hugo-themes/hugowind-dist"
         target: "_blank"
       - variant: "secondary"
         text: "在 Google Play 获取"
-        href: "https://github.com/arthelokyo/hugowind"
+        href: "https://github.com/ouraihub-hugo-themes/hugowind-dist"
         target: "_blank"
 ---
 

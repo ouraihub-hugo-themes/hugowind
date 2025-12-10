@@ -27,6 +27,6 @@ sections:
     actions:
       - variant: "primary"
         text: "Download Template"
-        href: "https://github.com/arthelokyo/hugowind"
+        href: "https://github.com/ouraihub-hugo-themes/hugowind-dist"
         icon: "tabler:download"
 ---

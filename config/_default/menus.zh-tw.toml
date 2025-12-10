@@ -160,7 +160,7 @@
 # ===== Header Actions =====
 [[actions]]
   name = "下載"
-  url = "https://github.com/onwidget/astrowind"
+  url = "https://github.com/ouraihub-hugo-themes/hugowind-dist"
   weight = 1
 
 # ===== Footer Links =====

@@ -119,7 +119,7 @@ sections:
     callToAction:
       target: "_blank"
       text: "More testimonials..."
-      href: "https://github.com/arthelokyo/hugowind"
+      href: "https://github.com/ouraihub-hugo-themes/hugowind-dist"
       icon: "tabler:chevron-right"
 
   # CallToAction Widget

@@ -26,4 +26,4 @@ HugoWind 是一個免費、可自訂且可用於生產環境的 Hugo + Tailwind 
 
 ### 開始使用
 
-訪問我們的 [GitHub 倉庫](https://github.com/onwidget/astrowind) 開始使用 HugoWind。
+訪問我們的 [GitHub 倉庫](https://github.com/ouraihub-hugo-themes/hugowind-dist) 開始使用 HugoWind。

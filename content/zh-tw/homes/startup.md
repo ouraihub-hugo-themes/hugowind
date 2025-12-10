@@ -12,7 +12,7 @@ sections:
     actions:
       - variant: "primary"
         text: "獲取模板"
-        href: "https://github.com/arthelokyo/hugowind"
+        href: "https://github.com/ouraihub-hugo-themes/hugowind-dist"
         target: "_blank"
         icon: "tabler:download"
       - text: "了解更多"
@@ -129,7 +129,7 @@ sections:
     actions:
       - variant: "primary"
         text: "獲取模板"
-        href: "https://github.com/arthelokyo/hugowind"
+        href: "https://github.com/ouraihub-hugo-themes/hugowind-dist"
         target: "_blank"
         icon: "tabler:download"
 ---

@@ -15,7 +15,7 @@ sections:
     actions:
       - variant: "primary"
         text: "立即开始"
-        href: "https://github.com/arthelokyo/hugowind"
+        href: "https://github.com/ouraihub-hugo-themes/hugowind-dist"
         target: "_blank"
       - text: "了解更多"
         href: "#features"

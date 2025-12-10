@@ -15,11 +15,11 @@ sections:
     actions:
       - variant: "link"
         text: "App Store"
-        href: "https://github.com/arthelokyo/hugowind"
+        href: "https://github.com/ouraihub-hugo-themes/hugowind-dist"
         target: "_blank"
       - variant: "link"
         text: "Google Play"
-        href: "https://github.com/arthelokyo/hugowind"
+        href: "https://github.com/ouraihub-hugo-themes/hugowind-dist"
         target: "_blank"
 
   # Features2 Widget - How to use
@@ -121,7 +121,7 @@ sections:
     callToAction:
       target: "_blank"
       text: "Read more testimonials"
-      href: "https://github.com/arthelokyo/hugowind"
+      href: "https://github.com/ouraihub-hugo-themes/hugowind-dist"
       icon: "tabler:chevron-right"
 
   # FAQs Widget
@@ -147,11 +147,11 @@ sections:
     actions:
       - variant: "primary"
         text: "Download on App Store"
-        href: "https://github.com/arthelokyo/hugowind"
+        href: "https://github.com/ouraihub-hugo-themes/hugowind-dist"
         target: "_blank"
       - variant: "secondary"
         text: "Get it on Google Play"
-        href: "https://github.com/arthelokyo/hugowind"
+        href: "https://github.com/ouraihub-hugo-themes/hugowind-dist"
         target: "_blank"
 ---
 

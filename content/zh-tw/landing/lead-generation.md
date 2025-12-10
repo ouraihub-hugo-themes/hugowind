@@ -23,7 +23,7 @@ sections:
     actions:
       - variant: "primary"
         text: "下載模板"
-        href: "https://github.com/onwidget/astrowind"
+        href: "https://github.com/ouraihub-hugo-themes/hugowind-dist"
         icon: "tabler:download"
 ---
 

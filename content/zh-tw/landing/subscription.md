@@ -27,7 +27,7 @@ sections:
     actions:
       - variant: "primary"
         text: "下載模板"
-        href: "https://github.com/arthelokyo/hugowind"
+        href: "https://github.com/ouraihub-hugo-themes/hugowind-dist"
         icon: "tabler:download"
 ---
 

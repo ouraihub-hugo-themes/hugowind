@@ -206,7 +206,7 @@ MIT License - 详见 [LICENSE](LICENSE)
 
 ## 🙏 致谢
 
-- [AstroWind](https://github.com/onwidget/astrowind) - 设计灵感来源
+- [AstroWind](https://github.com/ouraihub-hugo-themes/hugowind-dist) - 设计灵感来源
 - [Hugo](https://gohugo.io/) - 静态网站生成器
 - [Tailwind CSS](https://tailwindcss.com/) - CSS 框架
 - [Pagefind](https://pagefind.app/) - 搜索引擎
