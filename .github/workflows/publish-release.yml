@@ -95,8 +95,8 @@ jobs:
             find static -type f ! -path "*/js/*" ! -path "*/css/*" -exec cp --parents {} "$RELEASE_PATH/" \; 2>/dev/null || true
           fi
 
-          # Copy documentation and config files
-          for file in theme.toml README.md LICENSE .gitignore; do
+          # Copy config files
+          for file in theme.toml LICENSE; do
             if [ -f "$file" ]; then
               cp "$file" "$RELEASE_PATH/"
             fi
@@ -106,38 +106,6 @@ jobs:
           if [ -f "go.mod.dist" ]; then
             cp "go.mod.dist" "$RELEASE_PATH/go.mod"
           fi
-
-          # Generate release info
-          cat > "$RELEASE_PATH/RELEASE-INFO.md" << EOF
-          # HugoWind Theme - Release Package
-
-          **Version**: ${{ steps.version.outputs.version }}
-          **Release Date**: $(date -u '+%Y-%m-%d %H:%M:%S')
-
-          ## What's Included
-
-          - ✅ Pre-compiled CSS (Tailwind CSS v4) in \`static/css/\`
-          - ✅ Pre-compiled JavaScript in \`static/js/\`
-          - ✅ Complete theme templates in \`layouts/\`
-          - ✅ Internationalization files in \`i18n/\`
-          - ✅ Hugo configuration in \`config/\`
-
-          **No build step required - ready to use immediately!**
-
-          ## Installation
-
-          ### Via Hugo Modules
-          \`\`\`toml
-          [module]
-            [[module.imports]]
-              path = "github.com/ouraihub-hugo-themes/hugowind-dist"
-          \`\`\`
-
-          ### Via Git Clone
-          \`\`\`bash
-          git clone https://github.com/ouraihub-hugo-themes/hugowind-dist.git themes/hugowind
-          \`\`\`
-          EOF
 
       - name: Create archives
         run: |
@@ -194,11 +162,99 @@ jobs:
           draft: false
           prerelease: false
 
-      # Optional: Sync to distribution repository
-      # Uncomment and configure if you have a separate dist repo
-      # - name: Sync to distribution repository
-      #   if: startsWith(github.ref, 'refs/tags/')
-      #   run: |
-      #     # Add sync logic here
-      #   env:
-      #     RELEASE_REPO_TOKEN: ${{ secrets.RELEASE_REPO_TOKEN }}
+      - name: Sync to distribution repository
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          VERSION=${{ steps.version.outputs.version }}
+          DIST_REPO_DIR="/tmp/hugowind-dist"
+          RELEASE_SOURCE="${GITHUB_WORKSPACE}/release/hugowind-${VERSION}"
+
+          echo "=== Sync to hugowind-dist ==="
+          echo "Version: ${VERSION}"
+          
+          mkdir -p "$DIST_REPO_DIR"
+          cd "$DIST_REPO_DIR"
+
+          # Clone distribution repository
+          git clone --depth 1 https://x-access-token:${{ secrets.RELEASE_REPO_TOKEN }}@github.com/ouraihub-hugo-themes/hugowind-dist.git . 2>&1 || {
+            echo "Initializing new repository..."
+            git init
+            git remote add origin https://x-access-token:${{ secrets.RELEASE_REPO_TOKEN }}@github.com/ouraihub-hugo-themes/hugowind-dist.git
+          }
+
+          # Clean old files (except .git)
+          find . -maxdepth 1 -not -name '.git*' -not -name '.' -exec rm -rf {} + 2>/dev/null || true
+
+          # Copy release files
+          cp -rv "${RELEASE_SOURCE}"/* .
+
+          # Generate README.md for dist repo
+          cat > README.md << 'EOF'
+          # HugoWind - Distribution Package
+
+          Pre-compiled distribution of [HugoWind](https://github.com/ouraihub-hugo-themes/hugowind) theme for Hugo Modules.
+
+          **Ready to use - no build step required!**
+
+          ## Installation
+
+          ### Hugo Modules (Recommended)
+
+          ```toml
+          [module]
+          [[module.imports]]
+            path = "github.com/ouraihub-hugo-themes/hugowind-dist"
+          ```
+
+          ```bash
+          hugo mod get -u
+          hugo server
+          ```
+
+          ### Git Clone
+
+          ```bash
+          git clone https://github.com/ouraihub-hugo-themes/hugowind-dist.git themes/hugowind
+          ```
+
+          ## What's Included
+
+          - ✅ Pre-compiled CSS (Tailwind CSS v4)
+          - ✅ Pre-compiled JavaScript
+          - ✅ Hugo templates
+          - ✅ i18n translations (zh/en/zh-tw)
+          - ✅ Configuration files
+
+          ## Features
+
+          - 🌍 Multi-language support (Chinese, English, Traditional Chinese)
+          - 🌙 Dark mode with system preference detection
+          - 🔍 Full-text search via Pagefind
+          - ⚡ High performance (PageSpeed 90+)
+          - 📱 Responsive design
+          - ♿ Accessibility support
+
+          ## For Development
+
+          Visit the source repository: [ouraihub-hugo-themes/hugowind](https://github.com/ouraihub-hugo-themes/hugowind)
+
+          ## License
+
+          MIT
+          EOF
+
+          # Git config and push
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          
+          git add -A
+          git commit -m "chore: sync theme v${VERSION}" || echo "No changes"
+          git tag -a "v${VERSION}" -m "HugoWind v${VERSION}" 2>/dev/null || true
+          
+          git branch -M main
+          git push -u origin main --force
+          git push origin "v${VERSION}" 2>/dev/null || true
+          
+          echo "=== Sync completed ==="
+        env:
+          RELEASE_REPO_TOKEN: ${{ secrets.RELEASE_REPO_TOKEN }}
