@@ -1,0 +1,71 @@
+{{- /*
+  Brands Widget - 复刻 AstroWind Brands.astro
+  参考: astrowind/src/components/widgets/Brands.astro
+  
+  参数:
+    - id: 可选，section 的 ID
+    - isDark: 可选，是否使用暗色背景
+    - tagline: 可选，标签行
+    - title: 可选，主标题
+    - subtitle: 可选，副标题
+    - icons: 可选，图标名称数组
+    - images: 可选，品牌图片数组
+      - src: 图片路径
+      - alt: 替代文本
+    - bg: 可选，自定义背景 HTML
+    - classes: 可选，自定义样式类
+  
+  Requirements: 1.2
+*/ -}}
+
+{{- $id := .id | default "" -}}
+{{- $isDark := .isDark | default false -}}
+{{- $tagline := .tagline | default "" -}}
+{{- $title := .title | default "" -}}
+{{- $subtitle := .subtitle | default "" -}}
+{{- $icons := .icons | default slice -}}
+{{- $images := .images | default slice -}}
+{{- $bg := .bg | default "" -}}
+{{- $classes := .classes | default dict -}}
+
+{{- /* 构建容器类 - 注意：widget-wrapper 已有 mx-auto，这里只设置 max-w */ -}}
+{{- $containerClass := printf "max-w-6xl %s" ($classes.container | default "") -}}
+
+{{- /* 构建内容 */ -}}
+{{- $content := "" -}}
+{{- $content = printf "%s%s" $content (partial "ui/headline.html" (dict "title" $title "subtitle" $subtitle "tagline" $tagline)) -}}
+
+{{- /* Brands 展示区域 */ -}}
+{{- $brandsHtml := `<div class="flex flex-wrap justify-center gap-x-6 sm:gap-x-12 lg:gap-x-24">` -}}
+
+{{- /* 图标列表 */ -}}
+{{- range $icons -}}
+{{- $brandsHtml = printf "%s%s" $brandsHtml (partial "ui/icon.html" (dict "name" . "class" "py-3 lg:py-5 w-12 h-auto mx-auto sm:mx-0 text-gray-500")) -}}
+{{- end -}}
+
+{{- /* 图片列表 */ -}}
+{{- range $images -}}
+{{- $imgSrc := "" -}}
+{{- $imgAlt := "" -}}
+{{- if reflect.IsMap . -}}
+  {{- $imgSrc = .src -}}
+  {{- $imgAlt = .alt | default "" -}}
+{{- else -}}
+  {{- $imgSrc = . -}}
+{{- end -}}
+{{- if $imgSrc -}}
+{{- $brandsHtml = printf `%s<div class="flex justify-center col-span-1 my-2 lg:my-4 py-1 px-3 rounded-md dark:bg-gray-200"><img src="%s" alt="%s" class="max-h-12" width="120" height="48" loading="lazy" /></div>` $brandsHtml $imgSrc $imgAlt -}}
+{{- end -}}
+{{- end -}}
+
+{{- $brandsHtml = printf "%s%s" $brandsHtml `</div>` -}}
+{{- $content = printf "%s%s" $content $brandsHtml -}}
+
+{{- /* 使用 WidgetWrapper 渲染 */ -}}
+{{- partial "ui/widget-wrapper.html" (dict
+  "id" $id
+  "isDark" $isDark
+  "containerClass" $containerClass
+  "bg" $bg
+  "content" $content
+) -}}

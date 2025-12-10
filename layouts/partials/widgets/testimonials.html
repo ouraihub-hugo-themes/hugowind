@@ -1,0 +1,111 @@
+{{- /*
+  Testimonials Widget - 复刻 AstroWind Testimonials.astro
+  参考: astrowind/src/components/widgets/Testimonials.astro
+  
+  参数:
+    - id: 可选，section 的 ID
+    - isDark: 可选，是否使用暗色背景
+    - tagline: 可选，标签行
+    - title: 可选，主标题
+    - subtitle: 可选，副标题
+    - testimonials: 必需，评价数组
+      - title: 可选，评价标题
+      - testimonial: 评价内容
+      - name: 评价者姓名
+      - job: 评价者职位
+      - image: 可选，头像图片
+        - src: 图片路径
+        - alt: 替代文本
+    - callToAction: 可选，行动按钮
+    - bg: 可选，自定义背景 HTML
+    - classes: 可选，自定义样式类
+  
+  Requirements: 1.7
+*/ -}}
+
+{{- $id := .id | default "" -}}
+{{- $isDark := .isDark | default false -}}
+{{- $tagline := .tagline | default "" -}}
+{{- $title := .title | default "" -}}
+{{- $subtitle := .subtitle | default "" -}}
+{{- $testimonials := .testimonials | default slice -}}
+{{- $callToAction := .callToAction | default dict -}}
+{{- $bg := .bg | default "" -}}
+{{- $classes := .classes | default dict -}}
+
+{{- /* 构建容器类 - 注意：widget-wrapper 已有 mx-auto，这里只设置 max-w */ -}}
+{{- $containerClass := printf "max-w-6xl %s" ($classes.container | default "") -}}
+
+{{- /* 构建内容 */ -}}
+{{- $content := "" -}}
+{{- $content = printf "%s%s" $content (partial "ui/headline.html" (dict "title" $title "subtitle" $subtitle "tagline" $tagline)) -}}
+
+{{- /* Testimonials 网格 */ -}}
+{{- $gridHtml := `<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">` -}}
+{{- range $testimonials -}}
+  {{- $gridHtml = printf "%s%s" $gridHtml `<div class="flex h-auto intersect-once motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0 intersect-quarter">` -}}
+  {{- $gridHtml = printf "%s%s" $gridHtml `<div class="flex flex-col p-4 md:p-6 rounded-md shadow-xl dark:shadow-none dark:border dark:border-slate-600">` -}}
+  
+  {{- /* 评价标题 */ -}}
+  {{- with .title -}}
+  {{- $gridHtml = printf `%s<h2 class="text-lg font-medium leading-6 pb-4">%s</h2>` $gridHtml . -}}
+  {{- end -}}
+  
+  {{- /* 评价内容 */ -}}
+  {{- with .testimonial -}}
+  {{- $gridHtml = printf `%s<blockquote class="flex-auto"><p class="text-muted">" %s "</p></blockquote>` $gridHtml . -}}
+  {{- end -}}
+  
+  {{- /* 分隔线 */ -}}
+  {{- $gridHtml = printf "%s%s" $gridHtml `<hr class="border-slate-200 dark:border-slate-600 my-4" />` -}}
+  
+  {{- /* 评价者信息 */ -}}
+  {{- $gridHtml = printf "%s%s" $gridHtml `<div class="flex items-center">` -}}
+  
+  {{- /* 头像 */ -}}
+  {{- with .image -}}
+    {{- $imgSrc := "" -}}
+    {{- $imgAlt := "" -}}
+    {{- if reflect.IsMap . -}}
+      {{- $imgSrc = .src -}}
+      {{- $imgAlt = .alt | default "" -}}
+    {{- else -}}
+      {{- $imgSrc = . -}}
+    {{- end -}}
+    {{- if $imgSrc -}}
+    {{- $gridHtml = printf `%s<div class="h-10 w-10 rounded-full border border-slate-200 dark:border-slate-600"><img class="h-10 w-10 rounded-full border border-slate-200 dark:border-slate-600 min-w-full min-h-full object-cover" src="%s" alt="%s" width="40" height="40" loading="lazy" /></div>` $gridHtml $imgSrc $imgAlt -}}
+    {{- end -}}
+  {{- end -}}
+  
+  {{- /* 姓名和职位 */ -}}
+  {{- $gridHtml = printf "%s%s" $gridHtml `<div class="grow ml-3 rtl:ml-0 rtl:mr-3">` -}}
+  {{- with .name -}}
+  {{- $gridHtml = printf `%s<p class="text-base font-semibold">%s</p>` $gridHtml . -}}
+  {{- end -}}
+  {{- with .job -}}
+  {{- $gridHtml = printf `%s<p class="text-xs text-muted">%s</p>` $gridHtml . -}}
+  {{- end -}}
+  {{- $gridHtml = printf "%s%s" $gridHtml `</div>` -}}
+  
+  {{- $gridHtml = printf "%s%s" $gridHtml `</div></div></div>` -}}
+{{- end -}}
+{{- $gridHtml = printf "%s%s" $gridHtml `</div>` -}}
+
+{{- $content = printf "%s%s" $content $gridHtml -}}
+
+{{- /* Call to Action 按钮 */ -}}
+{{- if and $callToAction $callToAction.text -}}
+{{- $ctaHtml := `<div class="flex justify-center mx-auto w-fit mt-8 md:mt-12 font-medium">` -}}
+{{- $ctaHtml = printf "%s%s" $ctaHtml (partial "ui/button.html" $callToAction) -}}
+{{- $ctaHtml = printf "%s%s" $ctaHtml `</div>` -}}
+{{- $content = printf "%s%s" $content $ctaHtml -}}
+{{- end -}}
+
+{{- /* 使用 WidgetWrapper 渲染 */ -}}
+{{- partial "ui/widget-wrapper.html" (dict
+  "id" $id
+  "isDark" $isDark
+  "containerClass" $containerClass
+  "bg" $bg
+  "content" $content
+) -}}

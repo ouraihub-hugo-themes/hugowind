@@ -1,0 +1,70 @@
+{{- /*
+  Stats Widget - 复刻 AstroWind Stats.astro
+  参考: astrowind/src/components/widgets/Stats.astro
+  
+  参数:
+    - id: 可选，section 的 ID
+    - isDark: 可选，是否使用暗色背景
+    - tagline: 可选，标签行
+    - title: 可选，主标题
+    - subtitle: 可选，副标题
+    - stats: 必需，统计数据数组
+      - amount: 数值
+      - title: 标题
+      - icon: 可选，图标名称
+    - bg: 可选，自定义背景 HTML
+    - classes: 可选，自定义样式类
+  
+  Requirements: 1.8
+*/ -}}
+
+{{- $id := .id | default "" -}}
+{{- $isDark := .isDark | default false -}}
+{{- $tagline := .tagline | default "" -}}
+{{- $title := .title | default "" -}}
+{{- $subtitle := .subtitle | default "" -}}
+{{- $stats := .stats | default slice -}}
+{{- $bg := .bg | default "" -}}
+{{- $classes := .classes | default dict -}}
+
+{{- /* 构建容器类 - 注意：widget-wrapper 已有 mx-auto，这里只设置 max-w */ -}}
+{{- $containerClass := printf "max-w-6xl %s" ($classes.container | default "") -}}
+
+{{- /* 构建内容 */ -}}
+{{- $content := "" -}}
+{{- $content = printf "%s%s" $content (partial "ui/headline.html" (dict "title" $title "subtitle" $subtitle "tagline" $tagline)) -}}
+
+{{- /* Stats 网格 */ -}}
+{{- $statsHtml := `<div class="flex flex-wrap justify-center -m-4 text-center">` -}}
+{{- range $stats -}}
+  {{- $statsHtml = printf "%s%s" $statsHtml `<div class="p-4 md:w-1/4 sm:w-1/2 w-full min-w-[220px] text-center md:border-r md:last:border-none dark:md:border-slate-500 intersect-once motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade intersect-quarter">` -}}
+  
+  {{- /* 图标 */ -}}
+  {{- with .icon -}}
+  {{- $statsHtml = printf `%s<div class="flex items-center justify-center mx-auto mb-4 text-primary">%s</div>` $statsHtml (partial "ui/icon.html" (dict "name" . "class" "w-10 h-10")) -}}
+  {{- end -}}
+  
+  {{- /* 数值 */ -}}
+  {{- with .amount -}}
+  {{- $statsHtml = printf `%s<div class="font-heading text-primary text-[2.6rem] font-bold dark:text-white lg:text-5xl xl:text-6xl">%v</div>` $statsHtml . -}}
+  {{- end -}}
+  
+  {{- /* 标题 */ -}}
+  {{- with .title -}}
+  {{- $statsHtml = printf `%s<div class="text-sm font-medium uppercase tracking-widest text-gray-800 dark:text-slate-400 lg:text-base">%s</div>` $statsHtml . -}}
+  {{- end -}}
+  
+  {{- $statsHtml = printf "%s%s" $statsHtml `</div>` -}}
+{{- end -}}
+{{- $statsHtml = printf "%s%s" $statsHtml `</div>` -}}
+
+{{- $content = printf "%s%s" $content $statsHtml -}}
+
+{{- /* 使用 WidgetWrapper 渲染 */ -}}
+{{- partial "ui/widget-wrapper.html" (dict
+  "id" $id
+  "isDark" $isDark
+  "containerClass" $containerClass
+  "bg" $bg
+  "content" $content
+) -}}

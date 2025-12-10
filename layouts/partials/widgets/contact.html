@@ -1,0 +1,129 @@
+{{- /*
+  Contact Widget - 复刻 AstroWind Contact.astro
+  参考: astrowind/src/components/widgets/Contact.astro
+  
+  参数:
+    - id: 可选，section 的 ID
+    - isDark: 可选，是否使用暗色背景
+    - tagline: 可选，标签行
+    - title: 可选，主标题
+    - subtitle: 可选，副标题
+    - inputs: 可选，表单输入字段数组
+      - type: 输入类型 (text, email, tel, textarea)
+      - name: 字段名称
+      - label: 标签文本
+      - placeholder: 占位符文本
+      - autocomplete: 自动完成属性
+    - textarea: 可选，文本域配置
+      - label: 标签文本
+      - name: 字段名称
+      - placeholder: 占位符文本
+      - rows: 行数
+    - disclaimer: 可选，免责声明配置
+      - label: 标签文本
+    - button: 可选，提交按钮文本
+    - description: 可选，表单描述
+    - bg: 可选，自定义背景 HTML
+    - classes: 可选，自定义样式类
+  
+  Requirements: 3.3
+*/ -}}
+
+{{- $id := .id | default "" -}}
+{{- $isDark := .isDark | default false -}}
+{{- $tagline := .tagline | default "" -}}
+{{- $title := .title | default "" -}}
+{{- $subtitle := .subtitle | default "" -}}
+{{- $inputs := .inputs | default slice -}}
+{{- $textarea := .textarea | default dict -}}
+{{- $disclaimer := .disclaimer | default dict -}}
+{{- $button := .button | default (i18n "contact_submit" | default "Contact us") -}}
+{{- $description := .description | default "" -}}
+{{- $bg := .bg | default "" -}}
+{{- $classes := .classes | default dict -}}
+
+{{- /* 构建容器类 - 注意：外层容器已有 max-w-7xl mx-auto，这里只添加额外的类 */ -}}
+{{- $containerClass := $classes.container | default "" -}}
+
+{{- /* 构建内容 */ -}}
+{{- $content := "" -}}
+{{- $content = printf "%s%s" $content (partial "ui/headline.html" (dict "title" $title "subtitle" $subtitle "tagline" $tagline)) -}}
+
+{{- /* 表单容器 */ -}}
+{{- if or $inputs $textarea -}}
+{{- $formHtml := `<div class="flex flex-col max-w-xl mx-auto rounded-lg backdrop-blur border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 shadow p-4 sm:p-6 lg:p-8 w-full">` -}}
+{{- $formHtml = printf "%s%s" $formHtml `<form>` -}}
+
+{{- /* 输入字段 */ -}}
+{{- range $inputs -}}
+{{- $inputType := .type | default "text" -}}
+{{- $inputName := .name | default "" -}}
+{{- $inputLabel := .label | default "" -}}
+{{- $inputPlaceholder := .placeholder | default "" -}}
+{{- $inputAutocomplete := .autocomplete | default "" -}}
+
+{{- if eq $inputType "textarea" -}}
+{{- /* 文本域 */ -}}
+{{- $formHtml = printf "%s%s" $formHtml `<div class="mb-6">` -}}
+{{- if $inputLabel -}}
+{{- $formHtml = printf `%s<label for="%s" class="block text-sm font-medium">%s</label>` $formHtml $inputName $inputLabel -}}
+{{- end -}}
+{{- $formHtml = printf `%s<textarea id="%s" name="%s" rows="4" placeholder="%s" class="py-3 px-4 block w-full text-md rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"></textarea>` $formHtml $inputName $inputName $inputPlaceholder -}}
+{{- $formHtml = printf "%s%s" $formHtml `</div>` -}}
+{{- else -}}
+{{- /* 普通输入框 */ -}}
+{{- $formHtml = printf "%s%s" $formHtml `<div class="mb-6">` -}}
+{{- if $inputLabel -}}
+{{- $formHtml = printf `%s<label for="%s" class="block text-sm font-medium">%s</label>` $formHtml $inputName $inputLabel -}}
+{{- end -}}
+{{- $formHtml = printf `%s<input type="%s" id="%s" name="%s" placeholder="%s"` $formHtml $inputType $inputName $inputName $inputPlaceholder -}}
+{{- if $inputAutocomplete -}}
+{{- $formHtml = printf `%s autocomplete="%s"` $formHtml $inputAutocomplete -}}
+{{- end -}}
+{{- $formHtml = printf `%s class="py-3 px-4 block w-full text-md rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900" />` $formHtml -}}
+{{- $formHtml = printf "%s%s" $formHtml `</div>` -}}
+{{- end -}}
+{{- end -}}
+
+{{- /* 独立的文本域配置 */ -}}
+{{- if $textarea.name -}}
+{{- $formHtml = printf "%s%s" $formHtml `<div class="mb-6">` -}}
+{{- if $textarea.label -}}
+{{- $formHtml = printf `%s<label for="%s" class="block text-sm font-medium">%s</label>` $formHtml $textarea.name $textarea.label -}}
+{{- end -}}
+{{- $rows := $textarea.rows | default 4 -}}
+{{- $formHtml = printf `%s<textarea id="%s" name="%s" rows="%d" placeholder="%s" class="py-3 px-4 block w-full text-md rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"></textarea>` $formHtml $textarea.name $textarea.name $rows ($textarea.placeholder | default "") -}}
+{{- $formHtml = printf "%s%s" $formHtml `</div>` -}}
+{{- end -}}
+
+{{- /* 免责声明复选框 */ -}}
+{{- if $disclaimer.label -}}
+{{- $formHtml = printf "%s%s" $formHtml `<div class="mb-6">` -}}
+{{- $formHtml = printf "%s%s" $formHtml `<div class="flex items-start">` -}}
+{{- $formHtml = printf "%s%s" $formHtml `<div class="flex mt-0.5"><input id="disclaimer" name="disclaimer" type="checkbox" class="cursor-pointer mt-1 py-3 px-4 block w-full text-md rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900" /></div>` -}}
+{{- $formHtml = printf `%s<div class="ml-3"><label for="disclaimer" class="cursor-pointer select-none text-sm text-gray-600 dark:text-gray-400">%s</label></div>` $formHtml $disclaimer.label -}}
+{{- $formHtml = printf "%s%s" $formHtml `</div></div>` -}}
+{{- end -}}
+
+{{- /* 描述文本 */ -}}
+{{- if $description -}}
+{{- $formHtml = printf `%s<div class="mb-6 text-sm text-gray-600 dark:text-gray-400">%s</div>` $formHtml $description -}}
+{{- end -}}
+
+{{- /* 提交按钮 */ -}}
+{{- $formHtml = printf "%s%s" $formHtml `<div class="mt-10 grid">` -}}
+{{- $formHtml = printf `%s<button type="submit" class="btn-primary">%s</button>` $formHtml $button -}}
+{{- $formHtml = printf "%s%s" $formHtml `</div>` -}}
+
+{{- $formHtml = printf "%s%s" $formHtml `</form></div>` -}}
+{{- $content = printf "%s%s" $content $formHtml -}}
+{{- end -}}
+
+{{- /* 使用 WidgetWrapper 渲染 */ -}}
+{{- partial "ui/widget-wrapper.html" (dict
+  "id" $id
+  "isDark" $isDark
+  "containerClass" $containerClass
+  "bg" $bg
+  "content" $content
+) -}}
