@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2](https://github.com/ouraihub-hugo-themes/hugowind/compare/v0.1.1...v0.1.2) (2025-12-10)
+
+
+### 🐛 Bug 修复
+
+* remove duplicate pnpm version in workflow ([d4e8cbb](https://github.com/ouraihub-hugo-themes/hugowind/commit/d4e8cbbee3bfea88184e05ec6242cebc30175214))
+
 ### 0.1.1 (2025-12-10)
 
 
