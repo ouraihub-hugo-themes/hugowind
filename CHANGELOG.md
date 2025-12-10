@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.4](https://github.com/ouraihub-hugo-themes/hugowind/compare/v0.1.3...v0.1.4) (2025-12-10)
+
+
+### 🐛 Bug 修复
+
+* add data mount to module.toml for footer data ([97d2e9a](https://github.com/ouraihub-hugo-themes/hugowind/commit/97d2e9abf09e0f7d76b648f2e44eb9b71bfc3e09))
+
 ### [0.1.3](https://github.com/ouraihub-hugo-themes/hugowind/compare/v0.1.2...v0.1.3) (2025-12-10)
 
 
