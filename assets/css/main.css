@@ -6,6 +6,11 @@
 
 @import "tailwindcss";
 
+/* Tailwind CSS v4 需要 @source 指令来扫描模板文件 */
+@source "../../layouts/**/*.html";
+@source "../../content/**/*.md";
+@source "../ts/**/*.ts";
+
 /* ============================================
    1. CSS 变量定义 - 与 AstroWind 完全一致
    ============================================ */

@@ -16,7 +16,7 @@
     "ts:dev": "pnpm run ts:dev:main && pnpm run ts:dev:toggle",
     "ts:dev:main": "esbuild assets/ts/main.ts --bundle --sourcemap --outfile=static/js/main.js --target=es2020",
     "ts:dev:toggle": "esbuild assets/ts/toggle-theme.ts --bundle --sourcemap --outfile=static/js/toggle-theme.js --target=es2020",
-    "css:build": "tailwindcss -i ./assets/css/main.css -o ./static/css/main.css --minify",
+    "css:build": "tailwindcss -i ./assets/css/main.css -o ./static/css/main.css --minify --optimize",
     "css:watch": "tailwindcss -i ./assets/css/main.css -o ./static/css/main.css --watch",
     "css:dev": "tailwindcss -i ./assets/css/main.css -o ./static/css/main.css",
     "dev": "concurrently -n \"TS,CSS,Hugo\" -c \"blue,green,yellow\" \"pnpm run ts:watch\" \"pnpm run css:watch\" \"hugo server --logLevel debug --disableFastRender\"",
