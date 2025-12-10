@@ -40,7 +40,7 @@
 [[main]]
   parent = "pages"
   name = "Features (Anchor Link)"
-  url = "/en/#features"
+  url = "/#features"
   weight = 1
 
 [[main]]
