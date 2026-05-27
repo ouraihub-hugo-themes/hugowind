@@ -17,13 +17,13 @@ html {
 }
 
 /* 暗色模式基础 - 防止闪烁 */
-html.dark {
+html[data-theme="dark"] {
   color-scheme: dark;
   background-color: #0f172a;
   color: #f1f5f9;
 }
 
-html:not(.dark) {
+html:not([data-theme="dark"]) {
   color-scheme: light;
   background-color: #ffffff;
   color: #1e293b;
@@ -104,7 +104,7 @@ body {
   animation: skeleton-loading 1.5s infinite;
 }
 
-html.dark .skeleton {
+html[data-theme="dark"] .skeleton {
   background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
   background-size: 200% 100%;
 }

@@ -17,16 +17,13 @@
     </svg>
   </button>
   
-  <ul class="dropdown-menu hidden absolute right-0 rtl:right-auto rtl:left-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50">
-    {{- /* 如果当前页面有翻译版本，链接到翻译页面；否则链接到语言首页 */ -}}
+  <ul class="dropdown-menu hidden absolute left-0 rtl:left-auto rtl:right-0 mt-2 w-32 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50">
     {{- if .IsTranslated }}
-      {{- /* 当前语言 */ -}}
       <li>
         <span class="block px-4 py-2 text-sm text-primary dark:text-blue-400 font-medium bg-gray-50 dark:bg-gray-700/50">
           {{ .Site.Language.LanguageName }}
         </span>
       </li>
-      {{- /* 翻译版本 - 使用 RelPermalink 生成相对路径 */ -}}
       {{- range .Translations }}
       <li>
         <a href="{{ .RelPermalink }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
@@ -35,7 +32,6 @@
       </li>
       {{- end }}
     {{- else }}
-      {{- /* 没有翻译时，显示所有语言并链接到首页 */ -}}
       {{- range .Site.Languages }}
       <li>
         {{- if eq .Lang $.Site.Language.Lang }}

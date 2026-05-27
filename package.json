@@ -4,6 +4,9 @@
   "description": "A Hugo theme inspired by AstroWind with full multilingual support",
   "type": "module",
   "scripts": {
+    "sync:shared": "rm -rf layouts/partials/shared && cp -r node_modules/@ouraihub/hugo-shared/partials layouts/partials/shared && rm -rf assets/css/shared && cp -r node_modules/@ouraihub/hugo-shared/css assets/css/shared",
+    "predev": "pnpm sync:shared",
+    "prebuild": "pnpm sync:shared",
     "release": "standard-version && git push --follow-tags origin main",
     "release:minor": "standard-version --release-as minor && git push --follow-tags origin main",
     "release:major": "standard-version --release-as major && git push --follow-tags origin main",
@@ -70,5 +73,8 @@
     "tailwindcss": "^4.1.16",
     "typescript": "^5.3.0",
     "vitest": "^4.0.5"
+  },
+  "dependencies": {
+    "@ouraihub/hugo-shared": "file:../ui-dev/ui-library/packages/hugo-shared"
   }
 }

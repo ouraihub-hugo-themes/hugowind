@@ -35,7 +35,7 @@
   </ul>
   
   {{- /* 分页 */ -}}
-  {{ partial "blog/pagination.html" . }}
+  {{ partial "shared/pagination.html" (dict "paginator" .Paginator "style" "simple") }}
   {{- else }}
   {{- /* 无文章提示 */ -}}
   <div class="text-center py-12">

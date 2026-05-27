@@ -4,6 +4,10 @@
 /.hugo_build.lock
 hugo_stats.json
 
+# Shared modules (synced from @ouraihub/hugo-shared)
+layouts/partials/shared/
+assets/css/shared/
+
 # Node.js
 node_modules/
 .pnpm-store/

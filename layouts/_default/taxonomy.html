@@ -47,7 +47,7 @@
   </div>
   
   {{- /* 分页 */ -}}
-  {{ partial "blog/pagination.html" . }}
+  {{ partial "shared/pagination.html" (dict "paginator" .Paginator "style" "simple") }}
   {{- else }}
   <div class="text-center py-12">
     <p class="text-xl text-muted dark:text-slate-400">

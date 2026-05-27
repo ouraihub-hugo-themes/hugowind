@@ -2,9 +2,6 @@
 {{- $themeMode := .Site.Params.ui.theme | default "system" -}}
 {{- $isThemeLocked := strings.HasSuffix $themeMode ":only" -}}
 
-{{- /* 主题配置数据属性 */ -}}
-<span data-theme-config="{{ $themeMode }}" class="hidden"></span>
-
 {{- if not $isThemeLocked }}
 <button 
   type="button" 

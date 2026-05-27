@@ -30,9 +30,9 @@
     // 主题应用函数
     function applyTheme(theme) {
       if (theme === 'dark') {
-        document.documentElement.classList.add('dark');
+        document.documentElement.setAttribute('data-theme', 'dark');
       } else {
-        document.documentElement.classList.remove('dark');
+        document.documentElement.setAttribute('data-theme', 'light');
       }
     }
     
@@ -54,7 +54,7 @@
     
     // 更新主题切换图标
     function updateThemeIcons() {
-      var isDark = document.documentElement.classList.contains('dark');
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
       document.querySelectorAll('[data-aw-toggle-color-scheme]').forEach(function(btn) {
         var sunIcon = btn.querySelector('.icon-sun');
         var moonIcon = btn.querySelector('.icon-moon');

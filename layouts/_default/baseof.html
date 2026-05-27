@@ -2,7 +2,8 @@
 <html lang="{{ .Site.Language.Lang }}" dir="{{ .Site.Language.Params.textDirection | default "ltr" }}" class="scroll-smooth 2xl:text-[20px]">
 <head>
   {{- partial "head/meta.html" . -}}
-  {{- partial "head/seo.html" . -}}
+  {{- partial "shared/seo-meta.html" . -}}
+  {{- partial "shared/schema.html" . -}}
   {{- partial "head/performance.html" . -}}
   {{- partial "head/assets.html" . -}}
   {{- block "head" . }}{{- end }}

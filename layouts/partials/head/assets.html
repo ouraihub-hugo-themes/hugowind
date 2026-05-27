@@ -22,18 +22,7 @@
     var defaultTheme = '{{ .Site.Params.ui.theme | default "system" }}';
     
     function applyTheme(theme) {
-      if (theme === 'dark') {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-      // 同步主题切换按钮状态
-      var matches = document.querySelectorAll('[data-aw-toggle-color-scheme] > input');
-      if (matches && matches.length) {
-        matches.forEach(function(elem) {
-          elem.checked = theme !== 'dark';
-        });
-      }
+      document.documentElement.setAttribute('data-theme', theme);
     }
     
     // 处理固定主题模式 (如 'dark:only' 或 'light:only')

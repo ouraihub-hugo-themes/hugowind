@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@ouraihub/hugo-shared':
+        specifier: file:../ui-dev/ui-library/packages/hugo-shared
+        version: file:../ui-dev/ui-library/packages/hugo-shared
     devDependencies:
       '@tailwindcss/cli':
         specifier: ^4.1.16
@@ -434,6 +438,9 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
+
+  '@ouraihub/hugo-shared@file:../ui-dev/ui-library/packages/hugo-shared':
+    resolution: {directory: ../ui-dev/ui-library/packages/hugo-shared, type: directory}
 
   '@pagefind/darwin-arm64@1.4.0':
     resolution: {integrity: sha512-2vMqkbv3lbx1Awea90gTaBsvpzgRs7MuSgKDxW0m9oV1GPZCZbZBJg/qL83GIUEN2BFlY46dtUZi54pwH+/pTQ==}
@@ -2390,6 +2397,8 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
+
+  '@ouraihub/hugo-shared@file:../ui-dev/ui-library/packages/hugo-shared': {}
 
   '@pagefind/darwin-arm64@1.4.0':
     optional: true
